@@ -16,7 +16,7 @@ public class F5Random {
         }
 		
         this.random = new SecureRandom();
-        this.random.engineSetSeed(new String("abcdefg123").getBytes());
+        this.random.engineSetSeed(new String("abc123").getBytes());
         this.b = new byte[1];
     }
 

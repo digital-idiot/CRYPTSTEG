@@ -11,10 +11,9 @@ import java.util.zip.ZipInputStream;
 
 /**
  * Extracts zip file
- * @since 1.0
+ * @author Sayantan Majumdar
  */
- public class Unzip
-{    
+ public class Unzip {
     private static final int BUFFER_SIZE = 4096;
 
 	/**
@@ -24,17 +23,14 @@ import java.util.zip.ZipInputStream;
 	 * @return array of Strings containing filepaths of the extracted files
 	 * @throws IOException
 	 */
-    public static void unzip(String zipFilePath, String destDirectory) throws IOException
-    {    	
+    public static void unzip(String zipFilePath, String destDirectory) throws IOException {
     	ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
 	    ZipEntry entry = zipIn.getNextEntry();    	        
-	    while (entry != null) 
-	    {
+	    while (entry != null) {
 	    	String ent=entry.getName(),filePath = destDirectory + "/" + ent;
 	        if (!entry.isDirectory())
 	            extractFile(zipIn, filePath);
-	        else 
-	        {                
+	        else {
 	        	File dir = new File(filePath);
 	            dir.mkdir();
 	        }
@@ -43,13 +39,11 @@ import java.util.zip.ZipInputStream;
 	    }
 	    zipIn.close();
     }    
-    private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException
-    {
+    private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
         byte[] bytesIn = new byte[BUFFER_SIZE];
         int read = 0;
-        while ((read = zipIn.read(bytesIn)) != -1)
-        {
+        while ((read = zipIn.read(bytesIn)) != -1) {
             bos.write(bytesIn, 0, read);
         }
         bos.close();

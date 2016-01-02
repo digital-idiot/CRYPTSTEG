@@ -1,7 +1,6 @@
 package edu.sxccal.stegano.utilities;
 
 import android.os.Bundle;
-import android.util.Base64;
 import android.widget.Button;
 import android.widget.TextView;
 import android.app.Activity;
@@ -25,17 +24,15 @@ import edu.sxccal.stegano.Stegano;
 
 
 /**
- * This module decodes a Stegano image and stores it in Decoded directory as "decoded.txt"
- * @since 1.0
+ * This module decodes a QR image
+ * @author Sayantan Majumdar
  */
 
-public class DecodeQR extends Activity implements View.OnClickListener
-{	
+public class DecodeQR extends Activity implements View.OnClickListener {
 	private Button bt;
 	public static TextView tv;
 	private final int PICKFILE_RESULT_CODE = 1;
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
 		setContentView(R.layout.activity_decode_qr);
 		bt=(Button)findViewById(R.id.edqr);
@@ -43,30 +40,24 @@ public class DecodeQR extends Activity implements View.OnClickListener
 	}
 
 	@Override
-	public void onClick(View v)
-	{
+	public void onClick(View v)	{
 		Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
         fileintent.setType("file/*");
-        try 
-        {
+        try {
             startActivityForResult(fileintent,PICKFILE_RESULT_CODE);            
         } 
-        catch (Exception e) 
-        {
+        catch (Exception e) {
             Log.create_log(e, getApplicationContext());
         }	
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{		  
-		  switch(requestCode)
-		  {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		  switch(requestCode) {
 			  case PICKFILE_RESULT_CODE:
-			   if(resultCode==RESULT_OK)
-			   {
+			   if(resultCode==RESULT_OK) {
 				    String f = data.getData().getPath();
-				    decode_qr(f);
+				    decodeQR(f);
 			   }
 			   break;
 		  }
@@ -76,27 +67,23 @@ public class DecodeQR extends Activity implements View.OnClickListener
 	 * Writes decoded message to Decoded.txt
 	 * @param f Input Stegano image
 	 */
-	public void decode_qr(String f)
-	{
-		try
-		{			
+	private void decodeQR(String f) {
+		try {
 			tv= (TextView)findViewById(R.id.dqr);
 			tv.setText("");
-			Bitmap bmp=BitmapFactory.decodeFile(f); //import Stegano image file
+			Bitmap bmp=BitmapFactory.decodeFile(f); //import QR image file
 			int width = bmp.getWidth(), height = bmp.getHeight();
 	        int[] pixels = new int[width * height];
 	        bmp.getPixels(pixels, 0, width, 0, 0, width, height);
 	        bmp.recycle();
-		 	bmp = null;
 	        RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels); 
 	        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));	       
 			Result qr_result = new QRCodeReader().decode(bitmap);
 			tv.setText("Successfully Decoded!\n");
 			tv.append("Decoded file is at:\n");
-			write_to_file(qr_result.getText().toString());
+			writeToFile(qr_result.getText().toString());
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			Log.create_log(e, getApplicationContext());
 		}
 	}
@@ -106,8 +93,7 @@ public class DecodeQR extends Activity implements View.OnClickListener
 	 * @param s Decoded string
 	 * @throws IOException
 	 */
-	public void write_to_file(String s) throws IOException
-	{
+	private void writeToFile(String s) throws IOException {
 		String dfile= Stegano.filePath+"/Decoded";
 		File dir=new File(dfile);
 		if(!dir.exists())
@@ -115,8 +101,7 @@ public class DecodeQR extends Activity implements View.OnClickListener
 		dfile+="/decoded.txt";
 		File file=new File(dfile);
 		FileOutputStream fp=new FileOutputStream(file);
-		byte[] result=Base64.decode(s.getBytes(), Base64.DEFAULT);
-		fp.write(result);
+		fp.write(s.getBytes());
 		fp.close();
 		tv.append(dfile);
 	}

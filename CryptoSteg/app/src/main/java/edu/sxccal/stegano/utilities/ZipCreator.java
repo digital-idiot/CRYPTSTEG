@@ -8,23 +8,21 @@ import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
 
 /**
- * User library to create a zip file	
+ * User library to create a zip file
+ * @author Sayantan Majumdar
 */
-public class ZipCreator
-{   
+public class ZipCreator {
 	/**
-	 * Create result.zip
+	 * Create foo.zip
 	 * @param zipFile Output zip file path
 	 * @param infiles input files to be zipped
 	 * @throws IOException
 	 */
-	public static void createZip(String zipFile,String[] infiles) throws IOException
-	{        
+	public static void createZip(String zipFile,String[] infiles) throws IOException {
 		byte[] buffer = new byte[4096];	 
 	    FileOutputStream fos = new FileOutputStream(zipFile);	 
 	    ZipOutputStream zos = new ZipOutputStream(fos);	             
-	    for (int i=0;i<infiles.length;i++)
-	    {	                 
+	    for (int i=0;i<infiles.length;i++) {
 	    	File srcFile = new File(infiles[i]);	 
 	        FileInputStream fis = new FileInputStream(srcFile);                
 	        zos.putNextEntry(new ZipEntry(srcFile.getName()));	                 

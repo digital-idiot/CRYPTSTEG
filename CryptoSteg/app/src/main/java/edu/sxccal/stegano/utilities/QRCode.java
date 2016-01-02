@@ -14,8 +14,11 @@ import java.io.IOException;
 
 import edu.sxccal.stegano.Stegano;
 
-public class QRCode
-{
+/**
+ * QRCode module
+ * @author Sayantan Majumdar
+ */
+public class QRCode {
     public static String str="";
 
     /**
@@ -24,8 +27,7 @@ public class QRCode
      * @throws IOException
      * @throws WriterException
      */
-    public static void encode(String dataPath) throws IOException, WriterException
-    {
+    public static void encode(String dataPath) throws IOException, WriterException {
             QRCodeWriter writer = new QRCodeWriter();
             String genqr="";
             int img_size=400;
@@ -34,8 +36,7 @@ public class QRCode
             genqr = Stegano.filePath + "/QRCode.png";
             BitMatrix bm = writer.encode(data, BarcodeFormat.QR_CODE,img_size,img_size);
             Bitmap bmp = Bitmap.createBitmap(img_size,img_size,Bitmap.Config.ARGB_8888);
-            if (bmp != null)
-            {
+            if (bmp != null) {
                 File f=new File(genqr);
                 if(f.exists())
                     f.delete();

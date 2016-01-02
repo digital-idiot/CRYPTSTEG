@@ -16,18 +16,16 @@ import edu.sxccal.stegano.Stegano;
 
 /**
  * Generate Log file and raise {@link android.widget.Toast}
+ * @author Sayantan Majumdar
  */
-public class Log
-{
+public class Log {
 	/**
 	 * Appends exception messages to Log.txt
 	 * @param e Exception object
 	 * @param context Defines the activity context where the Toast will be displayed
 	 */
-	public static void create_log(Exception e, Context context)
-	{		
-		try
-		{
+	public static void create_log(Exception e, Context context)	{
+		try	{
 			 String log= Stegano.filePath+"/log.txt"; //create log file
 			 String s="Oops!\nErrors have been detected\nCheck: "+log;			 
 			 Toast toast = Toast.makeText(context,s,Toast.LENGTH_SHORT);
@@ -41,6 +39,7 @@ public class Log
 			 e.printStackTrace(pw);
 			 pw.println();
 			 pw.close();
-		 }catch(IOException e2){}
+		 }
+		catch(IOException e2){}
      }
 }

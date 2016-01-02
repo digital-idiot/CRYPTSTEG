@@ -87,22 +87,20 @@ public class JpegEncoder {
     	this.JpegObj.Comment = comment;
     }
 
-    public boolean Compress() {
+    public boolean Compress() throws IOException {
         WriteHeaders(this.outStream);
         WriteCompressedData(this.outStream);
         WriteEOI(this.outStream);
-        return true;
-        /*try {
+        try {
             this.outStream.flush();
             return true;
         } catch (final IOException e) {
             Log.e(Jpeg.LOG, "IO Error: " + e.getMessage());
         }
-        
-        return false;*/
+        return false;
     }
 
-    public boolean Compress(final InputStream embeddedData) {
+    public boolean Compress(final InputStream embeddedData) throws IOException {
         this.embeddedData = embeddedData;
         return Compress();
     }
@@ -126,7 +124,7 @@ public class JpegEncoder {
         }
     }
 
-    public void WriteCompressedData(final BufferedOutputStream outStream) {
+    public void WriteCompressedData(final BufferedOutputStream outStream) throws IOException {
         final int offset;
         int i, j, r, c, a, b;
         final int temp = 0;
@@ -316,9 +314,12 @@ public class JpegEncoder {
             } catch (final Exception e) {
                 e.printStackTrace();
             }
-            Log.d(Jpeg.LOG, "Embedding of " + (byteToEmbed * 8 + 32) + " bits (" + byteToEmbed + "+4 bytes) ");
+            long bytesToEmbed=byteToEmbed * 8 + 32;
+            Log.d(Jpeg.LOG, "Embedding of " + bytesToEmbed + " bits (" + byteToEmbed + "+4 bytes) ");
             // We use the most significant byte for the 1 of n
             // code, and reserve one extra bit for future use.
+            if(bytesToEmbed>_expected)
+                throw new IOException("Image is too small to embed data");
             if (byteToEmbed > 0x007fffff) {
                 byteToEmbed = 0x007fffff;
             }

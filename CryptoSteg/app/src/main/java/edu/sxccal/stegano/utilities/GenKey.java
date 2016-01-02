@@ -1,21 +1,23 @@
 package edu.sxccal.stegano.utilities;
 
-public class GenKey 
-{
+/**
+ * Generate encryption and column numbers
+ * @author Sayantan Majumdar
+ */
+public class GenKey {
 	private int ncols, nencrypt;
 	/**
 	 *  
 	 * @param s Input secret key string
 	 */
-	public GenKey(String s)
-	{
-		gen_key(s);
+	public GenKey(String s)	{
+		genKey(s);
 	}
 	/**
 	 * 
 	 * @return number of columns
 	 */
-	public int get_colsize()
+	public int getColumnSize()
 	{
 		return ncols;
 	}
@@ -23,26 +25,17 @@ public class GenKey
 	 * 
 	 * @return number of times the encryption algorithm will have to done
 	 */
-	public int get_encryption_number()
+	public int getEncryptionNumber()
 	{
 		return nencrypt;
 	}
-	private int calc_nums(String s)
-	{
+	private int calculateNumbers(String s) {
 		int sum=0;
 		for(int i=0;i<s.length();++i)
 			sum+=(s.charAt(i)-48)*(i+1);
 		return sum;
 	}
-	private String reverse_string(String s)
-	{
-		String s1="";
-		for(int i=s.length()-1;i>=0;--i)
-			s1+=s.charAt(i);
-		return s1;
-	}
-	private void gen_key(String skey)
-	{
+	private void genKey(String skey) {
 		int j=17,mat[]=new int[17];
 		for(int i=1;i<17;++i)
 			mat[i]=j--;
@@ -51,14 +44,14 @@ public class GenKey
 		for(int i=0;i<skey.length();++i)
 			sum+=(int)skey.charAt(i)*Math.pow(base, i+1);
 		String s=""+sum;		
-		int val=calc_nums(s);
+		int val=calculateNumbers(s);
 		ncols=(int)(sum%val);		
 		if(ncols==0)
 			ncols=val;
 		else if(ncols>256)
 			ncols=256;
-		s=reverse_string(s);
-		val=calc_nums(s);
+		s=new StringBuilder(s).reverse().toString();
+		val=calculateNumbers(s);
 		nencrypt=(int)(sum%val);		
 		if(nencrypt==0)
 			nencrypt=val;	

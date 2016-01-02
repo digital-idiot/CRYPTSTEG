@@ -25,16 +25,15 @@ import edu.sxccal.stegano.utilities.Log;
  *the paths of the generated files
  *if successful
  *else raises a Toast that displays the path to Log.txt
+ * @author Sayantan Majumdar
  */
-public class Encrypt extends Activity implements Runnable,View.OnClickListener
-{		
+public class Encrypt extends Activity implements Runnable,View.OnClickListener {
 	private static ProgressDialog dialog;
 	private static String f,img, skey;
 	public static Exception except;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_encrypt);
         Button bt1=(Button)findViewById(R.id.doencr);
@@ -62,10 +61,8 @@ public class Encrypt extends Activity implements Runnable,View.OnClickListener
         });
 	}
 	@Override
-	public void onClick(View v)
-	{
-		try
-        {
+	public void onClick(View v)	{
+		try {
             Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
             fileintent.setType("file/*");
             if (v.getId() == R.id.doencr)
@@ -73,17 +70,14 @@ public class Encrypt extends Activity implements Runnable,View.OnClickListener
             else
                 startActivityForResult(fileintent,2);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
                 Log.create_log(e, getApplicationContext());
         }
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{		  
-		  switch(requestCode)
-		  {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		  switch(requestCode) {
 			  case 1:
 			   if(resultCode==RESULT_OK)
 			    f = data.getData().getPath();
@@ -94,22 +88,18 @@ public class Encrypt extends Activity implements Runnable,View.OnClickListener
 		  }
 	}
 	@Override
-	public void run()
-	{	
-		try
-		{
+	public void run() {
+		try	{
 			new DoEncrypt(skey,f,img);
 			handler.sendEmptyMessage(0);
 		}
-		catch(Exception e)
-		{			
+		catch(Exception e) {
 			except=e;
 			handler.sendEmptyMessage(1);
 		}
 			
 	}
-	private static Handler handler = new Handler()
-	{
+	private static Handler handler = new Handler() {
         @Override
 		public void handleMessage(Message msg) {
             dialog.dismiss();
@@ -123,4 +113,3 @@ public class Encrypt extends Activity implements Runnable,View.OnClickListener
         }
  	};	
 }
-

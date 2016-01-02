@@ -21,19 +21,17 @@ import edu.sxccal.stegano.utilities.DoDecrypt;
 import edu.sxccal.stegano.utilities.Log;
 
 /**
- *  This activity displays the verification result
- *  @since 1.0
- *  */
+ *  Decryption Activity
+ *  @author Sayantan Majumdar
+ */
 
-public class Decrypt extends Activity implements Runnable, View.OnClickListener
-{
+public class Decrypt extends Activity implements Runnable, View.OnClickListener {
 	private static ProgressDialog dialog;
 	private static String img,k, skey;
 	public static Exception except;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);	
 		setContentView(R.layout.activity_decrypt);
 		Button bt1=(Button)findViewById(R.id.select_image);
@@ -62,10 +60,8 @@ public class Decrypt extends Activity implements Runnable, View.OnClickListener
 	}
 
 	@Override
-	public void onClick(View v)
-	{
-		try
-		{
+	public void onClick(View v)	{
+		try	{
 			Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
 			fileintent.setType("file/*");
 			if (v.getId() == R.id.select_image)
@@ -73,17 +69,14 @@ public class Decrypt extends Activity implements Runnable, View.OnClickListener
 			else
 				startActivityForResult(fileintent,2);
 		}
-		catch (Exception e)
-		{
+        catch (Exception e)	{
 			Log.create_log(e, getApplicationContext());
 		}
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		  switch(requestCode)
-		  {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		  switch(requestCode) {
 			  case 1:
 			   if(resultCode==RESULT_OK)
 				    img = data.getData().getPath();
@@ -94,22 +87,17 @@ public class Decrypt extends Activity implements Runnable, View.OnClickListener
 		  }
 	}
 	@Override
-	public void run()
-	{
-		try
-		{
+	public void run() {
+		try	{
 			new DoDecrypt(skey,k,img);
 			handler.sendEmptyMessage(0);
 		}
-		catch(Exception e)
-		{
+        catch(Exception e) {
 			except=e;
 			handler.sendEmptyMessage(1);
 		}
-
 	}
-	private static Handler handler = new Handler()
-	{
+	private static Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			dialog.dismiss();
@@ -122,5 +110,4 @@ public class Decrypt extends Activity implements Runnable, View.OnClickListener
 			}
 		}
 	};
-
 }

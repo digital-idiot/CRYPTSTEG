@@ -97,7 +97,7 @@ public class Jpeg {
 		}
     }
     
-    public void compress(InputStream embedFile) {
+    public void compress(InputStream embedFile) throws IOException{
     	jpg.Compress(embedFile);
 		try {
 			dataOut.close();

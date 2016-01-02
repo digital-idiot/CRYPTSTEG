@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 
 /**
- * The about section of the app
+ * The about section of the app\
+ * @author Sayantan Majumdar
  */
-public class About extends Activity
-{	
+public class About extends Activity {
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 	}	

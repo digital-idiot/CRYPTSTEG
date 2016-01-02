@@ -9,18 +9,14 @@ import edu.sxccal.stegano.Stegano;
 
 /**
  * Main Encryption module
- * @author Sayantan Majumdar 
- * @since 1.0
+ * @author Sayantan Majumdar
  */
-public class DoEncrypt
-{
+public class DoEncrypt {
 	private static int ncols;
-	public DoEncrypt(String skey, String s, String imgfile) throws Exception
-	{
+	public DoEncrypt(String skey, String s, String imgfile) throws Exception {
 		encryptFile(skey, s, imgfile);
 	}
-	private void initMatrix(String s, int nrows, char mat[][])
-	{
+	private void initMatrix(String s, int nrows, char mat[][]) {
 		int k=0;		
 		for(int i=0;i<nrows;++i)
 			for(int j=0;j<ncols;++j)
@@ -35,29 +31,23 @@ public class DoEncrypt
 	 * @param ncols column size
 	 * @param flag 2D boolean matrix
 	 */
-	public static void initMatrix(String s, int nrows, int ncols, boolean flag[][])
-	{
+	public static void initMatrix(String s, int nrows, int ncols, boolean flag[][])	{
 		int k=0;
-		for(int i=0;i<nrows;++i)
-		{
-			for(int j=0;j<ncols;++j)
-			{
+		for(int i=0;i<nrows;++i) {
+			for(int j=0;j<ncols;++j) {
 				flag[i][j]=false;
 				if(k++<s.length())
 						flag[i][j]=true;
 			}
 		}
 	}
-	private void generateKey(String dir, int key_arr[]) throws IOException
-	{		
+	private void generateKey(String dir, int key_arr[]) throws IOException {
 		SecureRandom srand=new SecureRandom();		
 		DataOutputStream k=new DataOutputStream(new FileOutputStream(dir+"/key.txt"));	
 		boolean arr[]=new boolean[ncols];		
-		for(int i=0;i<ncols;++i)
-		{			
+		for(int i=0;i<ncols;++i) {
 			int r=srand.nextInt(ncols);
-			if(!arr[r])
-			{
+			if(!arr[r]) {
 				key_arr[i]=r;
 				k.writeInt(r);				
 			}			
@@ -67,8 +57,7 @@ public class DoEncrypt
 		}	
 		k.close();			
 	}		
-	private String generateCipher(int nrows, int key[], char mat[][], boolean flag[][])
-	{
+	private String generateCipher(int nrows, int key[], char mat[][], boolean flag[][])	{
 		String cipher_text="";		
 		for(int i=0;i<ncols;++i)
 			for(int j=0;j<nrows;++j)
@@ -84,8 +73,12 @@ public class DoEncrypt
 	 */
 	private void encryptFile(String skey, String s, String imgfile) throws Exception {
 		GenKey gk = new GenKey(skey);
-		ncols = gk.get_colsize();
-		int nencrypt = gk.get_encryption_number();
+		ncols = gk.getColumnSize();
+		int nencrypt = gk.getEncryptionNumber();
+		if(FileOperations.is_pdf(s)) {
+			FileOperations.extractTextFromPDF(s);
+			s=Stegano.filePath+"/out.txt";
+		}
 		String pt = FileOperations.readFile(s);
 		int len = pt.length() * 8, nrows = len / ncols;
 		if (len > (nrows * ncols))
@@ -103,9 +96,9 @@ public class DoEncrypt
 		}
 		cipher = FileOperations.bitsToAscii(cipher);
 		new DoStegano(cipher, imgfile);
-		/*String image=Stegano.filePath+"/steg.jpg",keyfile=Stegano.filePath+"/key.txt";
+		String image=Stegano.filePath+"/steg.jpg",keyfile=Stegano.filePath+"/key.txt";
 		String files[]={image,keyfile};
 		ZipCreator.createZip(Stegano.filePath+"/out.zip",files);
-		QRCode.encode(Stegano.filePath+"/out.zip");*/
+		QRCode.encode(Stegano.filePath+"/out.zip");
 	}
 }
